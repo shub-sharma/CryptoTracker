@@ -1,0 +1,12 @@
+h3 {
+    color: rgb(250, 246, 246);
+}
+.input-field {
+    margin: 0px 200px 2px 200px;
+}
+.input-field .search {
+    color: rgb(250, 246, 246);
+}
+p.flow-text {
+    color: rgb(250, 246, 246);
+}
