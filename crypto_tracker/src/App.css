@@ -1,12 +1,14 @@
-h3 {
-    color: rgb(250, 246, 246);
+div#crypto-collection {
+    background: white;
+    width: 70%;
+    margin: 0 auto 5px auto;
+    padding: 1em;
+    box-shadow: 1px 1px 0 rgb(206, 206, 206);
 }
-.input-field {
-    margin: 0px 200px 2px 200px;
+
+span.left {
+    font-weight: bold;
 }
-.input-field .search {
-    color: rgb(250, 246, 246);
-}
-p.flow-text {
-    color: rgb(250, 246, 246);
+span.right {
+    float: right;
 }
