@@ -15,7 +15,6 @@ export default class SearchBar extends Component {
                 <div class="input-field col s6">
                     <input class="search" id="search" type="text" placeholder="Search a crypto via ticker or name..." onChange={this.onChange}/>
                 </div>
-                <p class="flow-text">{this.state.search}</p>
             </div>
 
         )

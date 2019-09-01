@@ -1,14 +1,70 @@
-div#crypto-collection {
-    background: white;
-    width: 70%;
-    margin: 0 auto 5px auto;
-    padding: 1em;
-    box-shadow: 1px 1px 0 rgb(206, 206, 206);
+body {
+    background: #f7f7f7;
 }
 
-span.left {
-    font-weight: bold;
+.nav-wrapper {
+    /* background-color: #1d3d83; */
+    background: linear-gradient(to right, rgb(8, 13, 56), rgb(106, 55, 187));
+    box-shadow: 0 8px 14px 0 rgba(123, 120, 120, 0.22);
+    color: black;
+  }
+
+/* Cool round box market overview style */
+/* 
+.market-overview {
+    background: rgb(245, 245, 245);
+    padding: 0 50px;
+    border-radius: 10px;
+    
 }
-span.right {
-    float: right;
+
+.market h4 {
+    padding: 12px;
+} */
+
+
+
+/* Card animations */
+.card h5 {
+    padding: 10px 0px;
+    font-size: 30px;
+}
+.card {
+    transition: .3s;
+    background: rgb(255, 255, 255);
+}
+.card h5 {
+    color: black;
+}
+/* price */
+.card-content h6 {
+    color: #1d3d83;
+    font-size: 22px;
+}
+/* fullname    */
+.card-content p {
+    font-size: 18px;
+}
+.card-content .percent-day-change {
+    font-size: 20px;
+}
+
+.card:hover {
+    transform: scale(1.06);
+    background: #fff;
+}
+.percent-day-change #positive-change {
+    color: rgb(0, 105, 0);
+}
+.percent-day-change #negative-change {
+    color: rgb(105, 0, 0);
+}
+.market i {
+    padding: 13px;
+}
+.percent-day-change #positive-change .material-icons {
+    padding: 0px;
+}
+.percent-day-change #negative-change .material-icons {
+    padding: 0px;
 }

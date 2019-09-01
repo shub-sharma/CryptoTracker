@@ -3,7 +3,8 @@ import {NavLink} from 'react-router-dom'
 
 const Navbar = () => {
     return (
-        <nav className="nav-wrapper blue darken-2">
+        // blue darken-2
+        <nav className="nav-wrapper">
             <div className="container">
                 <NavLink className="brand-logo" to="/">Crypto Tracker</NavLink>
                 <ul className="right">
