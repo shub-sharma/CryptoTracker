@@ -2,32 +2,23 @@ import React, { Component } from 'react'
 
 
 const CRYPTO_COMPARE_URL = 'https://www.cryptocompare.com';
-const MAX_CHAR_LIM = 15;
+const MAX_CHAR_LIM = 10;
 
 export default class DisplayAllCoins extends Component {
 
     constructor() {
         super();
         this.state = {
-            coins: null,
+            coinList: [],
         }
+    }
+    getCoinList() {
+
     }
 
     componentDidMount() {
-        const coinData = this.props.coinData;
-        const newCoins = coinData.map((coin) => {
-            const imageURL = CRYPTO_COMPARE_URL + coin.CoinInfo.ImageUrl;
-            // console.log(imageURL);
-            return {
-                ticker: coin.CoinInfo.Name,
-                fullName: coin.CoinInfo.FullName,
-                price: coin.DISPLAY.USD.PRICE,
-                image: imageURL,
-                percentDayChange: coin.DISPLAY.USD.CHANGEPCTDAY,
-            }
-        })
-        this.setState({...this.state.coins, coins: newCoins});
-        console.log(this.state.coins);
+        
+
     }
 
     getFormattedFullName(fullName) {
@@ -54,20 +45,35 @@ export default class DisplayAllCoins extends Component {
         }
     }
     
-    handleSubmit = (e) => {
-        e.preventDefault();
-    }
-    coinList() {
-        const coins = this.state.coins.map(coin => {
-            console.log(coin);
+    // handleSubmit = (e) => {
+    //     e.preventDefault();
+    // }
+    coinList = () => {
+        const {coinData} = this.props;
+        let newCoins = []
+        for(let coin in coinData) {
+            const tempCoin = coinData[coin]['USD']
+            const newCoin = {
+                ticker: String(coin),
+                price: tempCoin['PRICE'],
+                image: CRYPTO_COMPARE_URL + tempCoin['IMAGEURL'],
+                percentDayChange: tempCoin['CHANGEPCTDAY'],
+            }
+            newCoins.push(newCoin);
+        }
+        this.setState({
+            coinList: newCoins
+        })
+        
+        const coins = this.state.coinList.map(coin => {
             return (            
                 <div className="col s3 center-align" key={coin.ticker}>
                     <div className="card">
                         <div className="card-content">
-                            <img src={coin.image} alt={coin.ticker} width="40" height="40"/>
+                            <img src={coin.image} alt={coin.ticker} width="80" height="80"/>
 
                             <h5>{coin.ticker}</h5>
-                            <p>{this.getFormattedFullName(coin.fullName)}</p>
+                            {/* <p>{this.getFormattedFullName(coin.fullName)}</p> */}
                             <div className="percent-day-change">{this.getPercentChangePerDay(coin.percentDayChange)}</div>
                             <h6>{coin.price}</h6>
                         </div>
@@ -78,7 +84,9 @@ export default class DisplayAllCoins extends Component {
 
             )
         }
+
         )
+        return coins;
     }
 
 
@@ -89,7 +97,7 @@ export default class DisplayAllCoins extends Component {
                 <h4 className="center">Market Overview</h4>
                 <i>Note: All prices are in USD. Percent change indicates the change per day.</i>
                 <div className="row">
-                {this.coinList}
+                    {this.coinList()}
                 </div>
             </div>
         )

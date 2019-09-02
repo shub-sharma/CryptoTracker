@@ -33,6 +33,7 @@ body {
     transition: .3s;
     background: rgb(255, 255, 255);
 }
+/* ticker */
 .card h5 {
     color: black;
 }
@@ -45,6 +46,7 @@ body {
 .card-content p {
     font-size: 18px;
 }
+/* percent change */
 .card-content .percent-day-change {
     font-size: 20px;
 }
@@ -66,5 +68,8 @@ body {
     padding: 0px;
 }
 .percent-day-change #negative-change .material-icons {
+    padding: 0px;
+}
+.percent-day-change #no-change .material-icons {
     padding: 0px;
 }
