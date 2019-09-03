@@ -4,85 +4,112 @@ import LoadingScreen from './LoadingScreen'
 import axios from 'axios';
 
 export default class Market extends Component {
-
+    _isMounted = false;
     constructor(props) {
         super(props);
         this.state = {
             isLoaded: false,
-            coinData: null,
-            coinHoldings: [],
+            coinList: null,
+            portfolio: [],
         }
         this.getApiData = this.getApiData.bind(this);
-        this.fsyms = this.fsyms();
+        this.fsyms = '';
+        
     }
 
-    fsyms = () => {
-        const cryptocurrencies = require('cryptocurrencies');
-        const fsyms = cryptocurrencies.symbols().slice(0, 200).join(',');
-        // const fsyms = cryptocurrencies.symbols().join(',');
-        console.log(fsyms);
-        return fsyms
+
+        
 
 
-    }
+
 
     componentDidMount() {
+        const jsonTopCoins = require('../Top100Coins.json');
+        const fsymsArr = []
+        const coinArray = []
+        for(let i = 0; i < jsonTopCoins.length; i++){
+            coinArray.push({
+                ticker: jsonTopCoins[i]['symbol'],
+                fullName: jsonTopCoins[i]['name'],
+            })
+            fsymsArr.push(jsonTopCoins[i]['symbol']);
+        }
+        this._isMounted = true;
+        this.setState({coinList: coinArray});
+        const fsyms = fsymsArr.join(',');
+        this.fsyms = fsyms;
         this.getApiData();
         setInterval(this.getApiData, 10000); // Caching limit is 10s.
     }
 
-    // getApiData() {
-    //     const url = 'https://min-api.cryptocompare.com/data/top/mktcapfull?limit=100&tsym=USD';
-    //     // const url = 'https://min-api.cryptocompare.com/data/all/coinlist/';
-    //     const apiKey = 'aff46362b8aef9ef13b86e6eb6c5e55bd01e664ed9cef2b0dffd71d37ae9add0';
-    //     const fullURL = url + '&api_key=' + apiKey;
-    //     axios.get(fullURL)
-    //         .then(res => {
-    //             console.log(res.data)
-    //             this.setState({
-    //                 isLoaded: true,
-    //                 coinData: res.data.Data,
-                    
-    //             })
-    //         })
-    // } <- Top 100 coins by mktcap
-
-    //Top 300 coins by market cap with a faster cache rate.
+    /* Extract the info from the api and place it in this.state.coinList for rendering
+     *
+     */
     getApiData() {
-        // const fsyms = 'BTC,ETH,XRP,BCH,LTC,USDT,BNB'
+        /* Build a list of all 100 coins and make an array of objects like so {'BTC': {fullName: 'Bitcoin'}, 'ETH': {fullName: 'Ethereum'}}} etc.
+         * I'll get all the keys and turn them into a string like so: 'BTC,ETH,LTC' etc. and append it to tsyms. This is all done in seperate function
+         and is this class's property.
+         */
+
+        const CRYPTO_COMPARE_URL = 'https://www.cryptocompare.com';
         
         const url = 'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + this.fsyms +'&tsyms=USD'
-        // const url = 'https://min-api.cryptocompare.com/data/all/coinlist/';
-        // const apiKey = 'aff46362b8aef9ef13b86e6eb6c5e55bd01e664ed9cef2b0dffd71d37ae9add0';
-        // const fullURL = url + '&api_key=' + apiKey;
         axios.get(url)
             .then(res => {
-                // console.log(res.data.DISPLAY);
-                this.setState({
-                    isLoaded: true,
-                    coinData: res.data.DISPLAY,
-                    
-                })
+                if(this._isMounted) {
+                    let coinData = res.data.DISPLAY;
+                    const {coinList} = this.state;
+                    for(let i = 0; i < coinList.length; i++) {
+                        let coin = coinList[i]['ticker'];
+                        coinList[i]['price'] = coinData[coin]['USD']['PRICE']
+                        coinList[i]['image'] = CRYPTO_COMPARE_URL + coinData[coin]['USD']['IMAGEURL'];
+                        coinList[i]['percentDayChange'] = coinData[coin]['USD']['CHANGEPCTDAY'];
+                    }
+                    this.setState({coinList: coinList, isLoaded: true});
+                }
+
+
+
             })
+    
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
 
 
 
+    addToPortfolio = (ticker) => {
+        const coinToAdd = this.state.coinList.filter(coin => {
+            return coin['ticker'] === ticker
+        })
+        // console.log(coinToAdd);
+        let isUnique = true;
+        const {prevPortfolio} = this.state.portfolio;
+        if(isUnique) {
+            let newPortfolio = [...this.state.portfolio, coinToAdd[0]];
+            this.setState({portfolio: newPortfolio});
+        }
 
-    addCrypto = (ticker, coinName, amountOfCoin, initialAmountBoughtWith) => {
-        // const coinholdings = this.state.coinHoldings.filter() 
+
+
+
+        
     }
 
     
     displayData() {
-        if(!this.state.coinData || !this.state.isLoaded) {
+        if(this.state.coinList == null || !this.state.isLoaded) {
             return(<LoadingScreen />)
         } else {
-            return(<DisplayCoins addCrypto={this.addCrypto} coinData={this.state.coinData}/>);
+            // console.log(this.state.coinList);
+            return(<DisplayCoins addToPortfolio={this.addToPortfolio} coinList={this.state.coinList}/>);
         }
     }
     render() {
+
+        // console.log(this.state.portfolio);
         return (
             <>
                 <div className="market-overview">

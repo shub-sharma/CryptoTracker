@@ -1,5 +1,6 @@
 body {
     background: #f7f7f7;
+    /* background: #e7e7e7; */
 }
 
 .nav-wrapper {
@@ -9,28 +10,15 @@ body {
     color: black;
   }
 
-/* Cool round box market overview style */
-/* 
-.market-overview {
-    background: rgb(245, 245, 245);
-    padding: 0 50px;
-    border-radius: 10px;
-    
-}
-
-.market h4 {
-    padding: 12px;
-} */
-
-
 
 /* Card animations */
 .card h5 {
     padding: 10px 0px;
     font-size: 30px;
+
 }
 .card {
-    transition: .3s;
+    transition: .2s;
     background: rgb(255, 255, 255);
 }
 /* ticker */
@@ -40,8 +28,11 @@ body {
 /* price */
 .card-content h6 {
     color: #1d3d83;
+    /* color: black; */
     font-size: 22px;
+
 }
+
 /* fullname    */
 .card-content p {
     font-size: 18px;
@@ -53,7 +44,8 @@ body {
 
 .card:hover {
     transform: scale(1.06);
-    background: #fff;
+    background: rgb(255, 255, 255);
+
 }
 .percent-day-change #positive-change {
     color: rgb(0, 105, 0);
@@ -73,3 +65,46 @@ body {
 .percent-day-change #no-change .material-icons {
     padding: 0px;
 }
+
+
+
+.btn.waves-effect.waves-light {
+    background: rgb(207, 207, 207);
+}
+
+.btn.waves-effect.waves-light:hover {
+    background: #1d3d83;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Cool round box market overview style */
+/* 
+.market-overview {
+    background: rgb(245, 245, 245);
+    padding: 0 50px;
+    border-radius: 10px;
+    
+}
+
+.market h4 {
+    padding: 12px;
+} */
+
