@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import DisplayCoins from './DisplayCoins'
 import LoadingScreen from './LoadingScreen'
+import Portfolio from '../Portfolio'
 import axios from 'axios';
 
 export default class Market extends Component {
-    _isMounted = false;
+    _isMounted = false; // Prevent component unmounting errors.
     constructor(props) {
         super(props);
         this.state = {
@@ -16,12 +17,6 @@ export default class Market extends Component {
         this.fsyms = '';
         
     }
-
-
-        
-
-
-
 
     componentDidMount() {
         const jsonTopCoins = require('../Top100Coins.json');
@@ -42,15 +37,7 @@ export default class Market extends Component {
         setInterval(this.getApiData, 10000); // Caching limit is 10s.
     }
 
-    /* Extract the info from the api and place it in this.state.coinList for rendering
-     *
-     */
     getApiData() {
-        /* Build a list of all 100 coins and make an array of objects like so {'BTC': {fullName: 'Bitcoin'}, 'ETH': {fullName: 'Ethereum'}}} etc.
-         * I'll get all the keys and turn them into a string like so: 'BTC,ETH,LTC' etc. and append it to tsyms. This is all done in seperate function
-         and is this class's property.
-         */
-
         const CRYPTO_COMPARE_URL = 'https://www.cryptocompare.com';
         
         const url = 'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + this.fsyms +'&tsyms=USD'
@@ -73,29 +60,33 @@ export default class Market extends Component {
             })
     
     }
+
     componentWillUnmount() {
         this._isMounted = false;
     }
 
-
-
-
     addToPortfolio = (ticker) => {
-        const coinToAdd = this.state.coinList.filter(coin => {
-            return coin['ticker'] === ticker
-        })
-        // console.log(coinToAdd);
+        const portfolio = [...this.state.portfolio];
         let isUnique = true;
-        const {prevPortfolio} = this.state.portfolio;
-        if(isUnique) {
-            let newPortfolio = [...this.state.portfolio, coinToAdd[0]];
-            this.setState({portfolio: newPortfolio});
+        for(let i = 0; i < portfolio.length; i++) {
+            if(portfolio[i]['ticker'] === ticker) {
+                isUnique = false;
+            }
         }
 
-
-
-
-        
+        if(isUnique) {
+            //coinToAdd is an array containing only (e.g. coinToAdd = [{'name':'BTC'....}]) 
+            const foundCoin = this.state.coinList.filter(coin => {
+                return coin['ticker'] === ticker
+            })
+            let coinToAdd = foundCoin[0];
+            coinToAdd['coinAmount'] = 1;
+            // coinToAdd['usdAmount'] = coinToAdd['price'] * coinToAdd['coinAmount'];
+            if(isUnique) {
+                let newPortfolio = [...portfolio, coinToAdd];
+                this.setState({portfolio: newPortfolio});
+            }   
+        }
     }
 
     
@@ -103,13 +94,12 @@ export default class Market extends Component {
         if(this.state.coinList == null || !this.state.isLoaded) {
             return(<LoadingScreen />)
         } else {
-            // console.log(this.state.coinList);
             return(<DisplayCoins addToPortfolio={this.addToPortfolio} coinList={this.state.coinList}/>);
         }
     }
     render() {
 
-        // console.log(this.state.portfolio);
+        console.log(this.state.portfolio);
         return (
             <>
                 <div className="market-overview">

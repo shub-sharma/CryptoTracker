@@ -13,7 +13,7 @@ const DisplayCoins = ({coinList, addToPortfolio}) => {
     }
 
     const getPercentChangePerDay = (percent) => {
-        if (percent === 0){
+        if (percent == 0){
             return (
                 <div id="no-change">
                 {/* arrow_drop_up */}
