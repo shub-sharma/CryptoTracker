@@ -24,6 +24,7 @@ export default class Portfolio extends Component {
         return (
             <div className="container">
                 <h4 className="center">Track Your Crypto Assets</h4>
+                <p><i>All of the coins added from Market Overview appear here :)</i></p>
             </div>
         )
     }
